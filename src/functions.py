@@ -12,7 +12,8 @@ def get_repos_stats(username):
                 'name': repo['name'],
                 'stars': repo['stargazers_count'],
                 'forks': repo['forks_count'],
-                'language': repo['language']
+                'language': repo['language'],
+                'updated_at': repo['updated_at']
             })
         if 'next' in response.links:
             response = requests.get(response.links['next']['url'])

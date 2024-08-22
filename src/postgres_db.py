@@ -19,7 +19,8 @@ class PostgresDB:
             name VARCHAR(255),
             stars INT,
             forks INT,
-            language VARCHAR(255)
+            language VARCHAR(255),
+            updated_at TEXT
             );
             """)
 
@@ -27,14 +28,14 @@ class PostgresDB:
         with self.conn:
             for stat in stats:
                 self.cur.execute(
-                    f"INSERT INTO {self.table_name} (name, stars, forks, language) VALUES (%s, %s, %s, %s)",
-                    (stat["name"], stat["stars"], stat["forks"], stat["language"]))
+                    f"INSERT INTO {self.table_name} (name, stars, forks, language,updated_at) VALUES (%s, %s, %s, %s, %s)",
+                    (stat["name"], stat["stars"], stat["forks"], stat["language"],stat["updated_at"]))
 
     def export_to_json(self):
         with self.conn:
             self.cur.execute(f"SELECT * FROM {self.table_name}")
             data = self.cur.fetchall()
-            data_dict = [{"id": d[0], "name": d[1], "stars": d[2], "forks": d[3], "language": d[4]} for d in data]
+            data_dict = [{"id": d[0], "name": d[1], "stars": d[2], "forks": d[3], "language": d[4],"updated_at": d[5]} for d in data]
             with open(f"{self.table_name}.json", "w") as f:
                 json.dump(data_dict, f, indent=4)
 
@@ -47,5 +48,5 @@ class PostgresDB:
             else:
                 self.cur.execute(f"SELECT * FROM {self.table_name} ORDER BY name ASC LIMIT {count}")
             data = self.cur.fetchall()
-            data_dict = [{"name": d[1], "stars": d[2], "forks": d[3], "language": d[4]} for d in data]
+            data_dict = [{"name": d[1], "stars": d[2], "forks": d[3], "language": d[4],"updated_at": d[5]} for d in data]
             return data_dict

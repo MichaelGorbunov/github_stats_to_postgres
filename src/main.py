@@ -17,7 +17,9 @@ db_config = {
 
 
 def main():
-    data = get_repos_stats('skypro-008')
+    data = get_repos_stats('skypro-008')  # MichaelGorbunov
+    # data = get_repos_stats('MichaelGorbunov')
+
     db = PostgresDB(**db_config)
     db.insert_data(data)
 
